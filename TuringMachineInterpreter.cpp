@@ -4,6 +4,7 @@
 #include <string>
 #include <algorithm>
 #include <stdlib.h>
+#include <fstream>
 
 using namespace std;
 
@@ -27,13 +28,13 @@ vector <int> acceptingStates;
 vector <int> rejectingStates;
 map <int, int> stateLoc;
 
-void readTransitions() {
+void readTransitions(ifstream& fin) {
   string curLine;
   int fromState;
   int toState;
   
-  cin >> curLine;
-  cin >> curLine;
+  fin >> curLine;
+  fin >> curLine;
   while (curLine != "accepting:") {
     fromState = atoi((curLine.substr(1, curLine.find(":") - 1)).c_str());
     toState = atoi((curLine.substr(curLine.rfind("q") + 1)).c_str());
@@ -52,33 +53,33 @@ void readTransitions() {
     map <char, transition> *example = &states[stateLoc[fromState]].transitions;
     example->insert(pair <char, transition> (c, transition (r, d, toState)));
     
-    cin >> curLine;
+    fin >> curLine;
   }
 }
 
-void readAccepting() {
+void readAccepting(ifstream& fin) {
   string curLine;
   
-  cin >> curLine;
+  fin >> curLine;
   
   while (curLine != "rejecting:") {
     int SID = atoi((curLine.substr(1)).c_str());
     acceptingStates.push_back(SID);
     
-    cin >> curLine;
+    fin >> curLine;
   }
 }
 
-void readRejecting() {
+void readRejecting(ifstream& fin) {
   string curLine;
   
-  cin >> curLine;
+  fin >> curLine;
   
   while (curLine != "input:") {
     int SID = atoi((curLine.substr(1)).c_str());
     rejectingStates.push_back(SID);
     
-    cin >> curLine;
+    fin >> curLine;
   }
 }
 
@@ -98,10 +99,10 @@ bool shouldHalt (int stateID, char tapeHead) {
             != rejectingStates.end() || transitionNotExist);
 }
 
-void readInput() {
+void readInput(ifstream& fin) {
   string input;
   
-  cin >> input;
+  fin >> input;
   
   vector <char> tape;
   
@@ -137,10 +138,18 @@ void readInput() {
   }
 }
 
-int main() {
-  readTransitions();
-  readAccepting();
-  readRejecting();
-  readInput();
+int main(int argc, char** argv) {
+  if (argc != 2) {
+    cout << "Invalid argument usage. View README\n";
+    return 1;
+  }
+
+  ifstream fin;
+  fin.open(argv[1]);
+
+  readTransitions(fin);
+  readAccepting(fin);
+  readRejecting(fin);
+  readInput(fin);
   return 0;
 }
