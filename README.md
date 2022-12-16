@@ -16,6 +16,72 @@ Then, to run a turing machine program, use this command:
 
 There are sample turing machine programs in `./sample-machines`. Try running them and inspecting their source to see the kind of programs you can make.
 
+## Writing your own turing machine
+To write your own turing machine program, open up a text editor and start by writing the four sections you need:
+
+```
+transitions:
+
+accepting:
+
+rejecting:
+
+input:
+
+```
+
+To learn more about what these sections refer to, see the __Formal definition__ section.
+
+### Transitions:
+Format your transitions like so:
+
+```
+q[start_state]:[start_character]/[output_character],[r_or_l]-q[end_state]
+```
+For example,  `q0:a/b,r-q2` would mean that if the execution is instate `q0` and the tape head points to  `a`, replace it with a `b`, move the head right, and move to state `q2`.
+
+State identifiers can be any number. Read and write characters can be any ASCII character.
+
+### Accepting:
+This section is the list of accepting states. For example:
+
+```
+accepting:
+q5
+q8
+```
+
+The above example would mean that if the execution ever reaches state `q5` or `q8`, it would terminate and print `Accepted` to the terminal.
+
+### Rejecting:
+This section is the list of rejecting states. For example:
+
+```
+rejecting:
+q9
+q11
+```
+
+The above example would mean that if the execution ever reaches state `q9` or `q11`, it would terminate and print `Rejected` to the terminal.
+
+### Input:
+This section is how the tape will be initialized. For example:
+
+```
+input:
+abbc
+```
+
+The above example would initialize the tape to the following value:
+
+```
+|abbc|||||||||||||||||||||||||||||||||||||||||||||
+```
+
+The decision was made to place the input in the second position, because some programs benefit from having a little space to the left of input.
+
+The rest of the spaces are filled with `|` which can be read and manipulated by the turing machine like any other character
+
 ## Formal definition
 A turing machine follows a set of rules to manipulate the contents of a *tape*. It is possible to construct a turing machine which implements any computer algorithm.
 
